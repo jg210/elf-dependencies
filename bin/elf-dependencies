@@ -35,7 +35,7 @@ usage: #{tool_name} [<options>] [--] <so-paths>
 
 EXAMPLES
 
-#{tool_name.shellescape} `find /usr/lib -maxdepth 1 -type f -name '*.so*' -not -name ld.so.conf`
+#{tool_name.shellescape} `find /usr/lib -maxdepth 1 -type f -name '*.so*' -not -name ld.so.conf` | dot -Tsvg -Gconcentrate=true > deps.svg
 
 EOF
 
@@ -71,7 +71,7 @@ class Libs
   def to_dot
     puts "digraph deps {"
     @libs.each_value do |lib|
-      puts lib.to_dot_dependencies(self)
+      puts lib.to_dot_dependencies
     end
     puts "}"
   end
@@ -114,13 +114,15 @@ class Lib
     return @soname
   end
 
-  def deps(all_libs)
-    @deps.map {|soname| all_libs.lib(soname) }
+  def self.dot_quoted_soname(soname)
+    "\"#{soname.gsub('"', '\"')}\""
   end
 
-  def to_dot_dependencies(all_libs)
-    dot_strings = self.deps(all_libs).map do |dep|
-      "#{self.soname} -> #{dep.soname}".freeze
+  def to_dot_dependencies()
+    id_soname = self.class.dot_quoted_soname(@soname)
+    dot_strings = @deps.map do |dep|
+      id_dep = self.class.dot_quoted_soname(dep)
+      "#{id_soname} -> #{id_dep};".freeze
     end
     return dot_strings.join("\n").freeze
   end
