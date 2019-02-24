@@ -61,10 +61,24 @@ class Lib
   def self.parse_dependencies(options, path)
     stdout, status = ::Open3::capture2(options.objdump.to_s, '-p', path.to_s) 
     raise status.to_s unless status.success?
+    dependencies = []
+    soname = nil
+    pattern_needed = /  NEEDED +(?<soname>[^ ]*)/
+    pattern_soname = /  SONAME +(?<soname>[^ ]*)/
     stdout.each_line do |line|
-      next unless line.start_with?("  NEEDED ")
-      puts line
+      match_soname = pattern_soname.match(line)
+      if match_soname
+        if soname
+          raise "found soname of #{soname} more than once in: #{path.shellescape}"
+        end
+        soname = match_soname[:soname].chomp.freeze
+      end
+      match_needed = pattern_needed.match(line)
+      dependencies << match_needed[:soname].chomp.freeze if match_needed
     end
+    dependencies.freeze
+    puts "#{soname} #{dependencies}"
+    return soname, dependencies
   end
 
   def initialize(options, path)
