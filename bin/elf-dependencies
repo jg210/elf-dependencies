@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+#
+# Copyright 2019 Jeremy Green.
+
+require 'optparse'
+require 'pathname'
+require 'shellwords'
+
+class Options
+
+  def self.default_objdump
+    objdump = `which objdump`
+    if objdump.empty?
+      return nil
+    else
+      return Pathname.new(objdump)
+    end
+  end
+
+  def initialize(argv)
+    tool_name = Pathname.new(__FILE__).basename.to_s.freeze
+    @objdump = self.class.
+    parser = OptionParser.new do |opts|
+
+      opts.on("--objdump path",
+              "The location of the objdump tool. Def") do |path|
+        @cache_path = Pathname.new(path)
+      end              
+      
+    end
+    parser.banner = <<EOF
+
+usage: #{tool_name} [<options>] [--] <so-paths>
+
+EOF
+
+    non_option_args = parser.parse!(argv)
+    @paths = non_option_args.map { |arg| Pathname.new(arg) }
+
+    # TODO validate options
+  end
+
+  attr_reader :objdump
+  attr_reader :paths
+  
+end
+
+class Libs
+
+  def initialize(options, paths)
+    @libs = libs.map do |path|
+      Lib.new(options, path)
+    end
+  end
+
+end
+
+class Lib
+
+  def self.parse_dependencies(options, path)
+    ::Open3::popen2(options.objdump.to_s, '-p', path.to_s) do |stdin, stdout, wait_thr|
+      stdout.each_line do |line|
+        next unless line.start_with?("  NEEDED "
+        puts line
+      end
+    end
+  end
+
+  def initialize(options, path)
+    @deps = self.class.parse_dependencies(options, path)
+  end
+
+end
+
+###############################
+
+options = Options.new(ARGV)
+libs = Libs.new(options.paths)
