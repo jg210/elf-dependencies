@@ -33,6 +33,10 @@ class Options
 
 usage: #{tool_name} [<options>] [--] <so-paths>
 
+EXAMPLES
+
+#{tool_name.shellescape} `find /usr/lib -maxdepth 1 -type f -name '*.so*' -not -name ld.so.conf`
+
 EOF
 
     non_option_args = parser.parse!(argv)
@@ -49,9 +53,27 @@ end
 class Libs
 
   def initialize(options, paths)
-    @libs = paths.map do |path|
+    libs = paths.map do |path|
       Lib.new(options, path)
     end
+    @libs = {}
+    libs.each do |lib|
+      soname = lib.soname
+      raise "multiple libs with same soname: #{soname}" if @libs.include?(soname)
+      @libs[soname] = lib
+    end
+  end
+
+  def lib(soname)
+    @libs[soname]
+  end
+
+  def to_dot
+    puts "digraph deps {"
+    @libs.each_value do |lib|
+      puts lib.to_dot_dependencies(self)
+    end
+    puts "}"
   end
 
 end
@@ -77,18 +99,36 @@ class Lib
       dependencies << match_needed[:soname].chomp.freeze if match_needed
     end
     dependencies.freeze
-    puts "#{soname} #{dependencies}"
+    #puts "#{soname} #{dependencies}"
+    if soname.nil?
+      raise "soname nil for: #{path}"
+    end
     return soname, dependencies
   end
 
   def initialize(options, path)
-    @deps = self.class.parse_dependencies(options, path)
+    @soname, @deps = self.class.parse_dependencies(options, path)
   end
 
+  def soname
+    return @soname
+  end
+
+  def deps(all_libs)
+    @deps.map {|soname| all_libs.lib(soname) }
+  end
+
+  def to_dot_dependencies(all_libs)
+    dot_strings = self.deps(all_libs).map do |dep|
+      "#{self.soname} -> #{dep.soname}".freeze
+    end
+    return dot_strings.join("\n").freeze
+  end
+  
 end
 
 ###############################
 
 options = Options.new(ARGV)
 libs = Libs.new(options, options.paths)
-
+libs.to_dot
