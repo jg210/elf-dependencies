@@ -2,6 +2,7 @@
 #
 # Copyright 2019 Jeremy Green.
 
+require 'open3'
 require 'optparse'
 require 'pathname'
 require 'shellwords'
@@ -9,7 +10,7 @@ require 'shellwords'
 class Options
 
   def self.default_objdump
-    objdump = `which objdump`
+    objdump = `which objdump`.chomp.freeze
     if objdump.empty?
       return nil
     else
@@ -19,7 +20,7 @@ class Options
 
   def initialize(argv)
     tool_name = Pathname.new(__FILE__).basename.to_s.freeze
-    @objdump = self.class.
+    @objdump = self.class.default_objdump()
     parser = OptionParser.new do |opts|
 
       opts.on("--objdump path",
@@ -48,7 +49,7 @@ end
 class Libs
 
   def initialize(options, paths)
-    @libs = libs.map do |path|
+    @libs = paths.map do |path|
       Lib.new(options, path)
     end
   end
@@ -58,11 +59,11 @@ end
 class Lib
 
   def self.parse_dependencies(options, path)
-    ::Open3::popen2(options.objdump.to_s, '-p', path.to_s) do |stdin, stdout, wait_thr|
-      stdout.each_line do |line|
-        next unless line.start_with?("  NEEDED "
-        puts line
-      end
+    stdout, status = ::Open3::capture2(options.objdump.to_s, '-p', path.to_s) 
+    raise status.to_s unless status.success?
+    stdout.each_line do |line|
+      next unless line.start_with?("  NEEDED ")
+      puts line
     end
   end
 
@@ -75,4 +76,5 @@ end
 ###############################
 
 options = Options.new(ARGV)
-libs = Libs.new(options.paths)
+libs = Libs.new(options, options.paths)
+
