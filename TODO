@@ -1,0 +1,21 @@
+* Less ugly implementation.
+
+* A README.md.
+  - what it does.
+  - an example
+  - requirements
+    - sudo apt-get install graphviz
+
+* Check that graphviz is installed.
+
+* LD_LIBRARY_PATH support.
+
+* Pass output stream into graphviz-generation code.
+
+* Set up as ruby gem.
+
+* Automated build for gem.
+
+* Tests.
+
+* Publish gem.
