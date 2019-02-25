@@ -97,8 +97,10 @@ class Lib
     dependencies.freeze
     #puts "#{soname} #{dependencies}"
     if soname.nil?
-      raise "does not declare an SONAME: #{path}"
+      # TODO emit warning.
+      soname = path.basename.to_s
     end
+    soname.freeze
     return soname, dependencies
   end
 
