@@ -33,6 +33,10 @@ EXAMPLES
 
 #{tool_name.shellescape} `find /usr/lib -maxdepth 1 -type f -name '*.so*' -not -name ld.so.conf` | dot -Tsvg -Gconcentrate=true > deps.svg
 
+This performs a https://en.wikipedia.org/wiki/Transitive_reduction on the dependency graph:
+
+#{tool_name.shellescape} ... | tred | dot ...
+
 EOF
 
     non_option_args = parser.parse!(argv)
