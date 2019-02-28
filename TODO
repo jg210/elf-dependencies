@@ -7,6 +7,10 @@
   - test parsing parsing of mocked objdump output
   - apply to everything under /usr/lib/?
 
+* Add relevant rbenv stuff from aws-experiments repo.
+
+* Check that graphviz is installed.
+
 * Add example of output to README.
 
 * Make repo public.
