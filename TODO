@@ -1,6 +1,3 @@
-* Add example of output to README.
-
-* Check that graphviz is installed.
 
 * Set up as ruby gem.
 
@@ -8,10 +5,16 @@
 
 * Tests.
 
-* Publish gem.
+* Add example of output to README.
 
-* LD_LIBRARY_PATH support.
+
+* Make repo public.
 
 * Don't show backtrace just because provided with bad input.
 
+* Publish gem.
+
+* Allow dependencies to be found from LD_LIBRARY_PATH, not just command-line.
+
 * More robust quoting of graphviz identifiers.
+
