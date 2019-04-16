@@ -10,7 +10,7 @@ require 'shellwords'
 class Options
 
   def self.default_objdump
-    objdump = `which objdump`.chomp.freeze
+    objdump = `which objdump 2> /dev/null`.chomp.freeze
     if objdump.empty?
       return nil
     else
@@ -24,7 +24,7 @@ class Options
     parser = OptionParser.new do |opts|
 
       opts.on("--objdump path",
-              "The location of the objdump tool. Def") do |path|
+              "The location of the objdump tool.") do |path|
         @cache_path = Pathname.new(path)
       end              
       
