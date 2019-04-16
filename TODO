@@ -1,10 +1,8 @@
-* Libraries with no dependencies don't appear in dot output.
+* Pass output stream into graphviz-generation code.
 
 * Add example of output to README.
 
 * Check that graphviz is installed.
-
-* Pass output stream into graphviz-generation code.
 
 * Set up as ruby gem.
 

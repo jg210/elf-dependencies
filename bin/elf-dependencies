@@ -71,7 +71,7 @@ class Libs
   def to_dot
     puts "digraph deps {"
     @libs.each_value do |lib|
-      puts lib.to_dot_dependencies
+      puts lib.to_dot
     end
     puts "}"
   end
@@ -117,14 +117,14 @@ class Lib
   def self.dot_quoted_soname(soname)
     "\"#{soname.gsub('"', '\"')}\""
   end
-
-  def to_dot_dependencies()
+  
+  def to_dot()
     id_soname = self.class.dot_quoted_soname(@soname)
     dot_strings = @deps.map do |dep|
       id_dep = self.class.dot_quoted_soname(dep)
       "#{id_soname} -> #{id_dep};".freeze
     end
-    return dot_strings.join("\n").freeze
+    return ["#{id_soname};", *dot_strings].join("\n").freeze
   end
   
 end
