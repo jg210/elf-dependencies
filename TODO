@@ -1,12 +1,13 @@
-
 * Set up as ruby gem.
 
 * Automated build for gem.
 
 * Tests.
+  - --help option
+  - test parsing parsing of mocked objdump output
+  - apply to everything under /usr/lib/?
 
 * Add example of output to README.
-
 
 * Make repo public.
 
