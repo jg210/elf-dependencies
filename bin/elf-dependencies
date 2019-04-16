@@ -20,7 +20,7 @@ class Options
     parser = OptionParser.new do |opts|
 
       opts.on("--objdump path",
-              "The location of the objdump tool.") do |path|
+              "The location of the objdump tool. The default is to use PATH.") do |path|
         @cache_path = Pathname.new(path)
       end              
       
