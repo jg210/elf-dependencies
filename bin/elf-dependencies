@@ -68,12 +68,12 @@ class Libs
     @libs[soname]
   end
 
-  def to_dot
-    puts "digraph deps {"
+  def to_dot(f)
+    f.write("digraph deps {\n")
     @libs.each_value do |lib|
-      puts lib.to_dot
+      lib.to_dot(f)
     end
-    puts "}"
+    f.write("}\n")
   end
 
 end
@@ -115,16 +115,23 @@ class Lib
   end
 
   def self.dot_quoted_soname(soname)
-    "\"#{soname.gsub('"', '\"')}\""
+    "\"#{soname.gsub('"', '\"')}\"".freeze
   end
   
-  def to_dot()
+  def to_dot(f)
+    indentation = "  ".freeze
     id_soname = self.class.dot_quoted_soname(@soname)
-    dot_strings = @deps.map do |dep|
+    f.write(indentation)
+    f.write(id_soname)
+    f.write(";\n")
+    @deps.each do |dep|
       id_dep = self.class.dot_quoted_soname(dep)
-      "#{id_soname} -> #{id_dep};".freeze
+      f.write(indentation)
+      f.write(id_soname)
+      f.write(" -> ")
+      f.write(id_dep)
+      f.write(";\n")
     end
-    return ["#{id_soname};", *dot_strings].join("\n").freeze
   end
   
 end
@@ -133,4 +140,4 @@ end
 
 options = Options.new(ARGV)
 libs = Libs.new(options, options.paths)
-libs.to_dot
+libs.to_dot(STDOUT)

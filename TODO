@@ -1,5 +1,3 @@
-* Pass output stream into graphviz-generation code.
-
 * Add example of output to README.
 
 * Check that graphviz is installed.
@@ -15,3 +13,5 @@
 * LD_LIBRARY_PATH support.
 
 * Don't show backtrace just because provided with bad input.
+
+* More robust quoting of graphviz identifiers.
