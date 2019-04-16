@@ -1,3 +1,5 @@
+* Libraries with no dependencies don't appear in dot output.
+
 * Add example of output to README.
 
 * Check that graphviz is installed.
@@ -13,3 +15,5 @@
 * Publish gem.
 
 * LD_LIBRARY_PATH support.
+
+* Don't show backtrace just because provided with bad input.
