@@ -1,14 +1,6 @@
-* Less ugly implementation.
-
-* A README.md.
-  - what it does.
-  - an example
-  - requirements
-    - sudo apt-get install graphviz
+* Add example of output to README.
 
 * Check that graphviz is installed.
-
-* LD_LIBRARY_PATH support.
 
 * Pass output stream into graphviz-generation code.
 
@@ -19,3 +11,5 @@
 * Tests.
 
 * Publish gem.
+
+* LD_LIBRARY_PATH support.
