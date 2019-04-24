@@ -4,12 +4,13 @@
 
 * Tests.
   - --help option
-  - test parsing parsing of mocked objdump output
+  - test parsing of mocked objdump output
   - apply to everything under /usr/lib/?
+  - quoting of graphviz identifiers.
 
-* Add relevant rbenv stuff from aws-experiments repo.
+* Add relevant rbenv configuration from aws-experiments repo.
 
-* Check that graphviz is installed.
+* Check that objdump is installed.
 
 * Add example of output to README.
 
@@ -21,5 +22,6 @@
 
 * Allow dependencies to be found from LD_LIBRARY_PATH, not just command-line.
 
-* More robust quoting of graphviz identifiers.
+* Optionally fail if don't find all libraries.
+
 
