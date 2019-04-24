@@ -8,9 +8,8 @@ For more details on using the tool, run:
 bin/elf-dependencies --help
 ```
 
-## Dependencies
-
-To use this tool, you need:
+To use this tool, you need to have the following installed:
 
 * ruby
+* objdump
 * graphviz
