@@ -37,6 +37,8 @@ This performs a https://en.wikipedia.org/wiki/Transitive_reduction on the depend
 
 #{tool_name.shellescape} ... | tred | dot ...
 
+OPTIONS
+
 EOF
 
     non_option_args = parser.parse!(argv)
