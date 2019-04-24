@@ -20,7 +20,7 @@ class Options
     parser = OptionParser.new do |opts|
 
       opts.on("--objdump path",
-              "The location of the objdump tool. The default is to use PATH.") do |path|
+              "The location of the objdump tool. The default is to search for it on the PATH.") do |path|
         @cache_path = Pathname.new(path)
       end              
       
@@ -30,6 +30,8 @@ class Options
 usage: #{tool_name} [<options>] [--] <so-paths>
 
 EXAMPLES
+
+Generate a dependency diagram for /usr/lib/:
 
 #{tool_name.shellescape} `find /usr/lib -maxdepth 1 -type f -name '*.so*' -not -name ld.so.conf` | dot -Tsvg -Gconcentrate=true > deps.svg
 
