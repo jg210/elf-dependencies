@@ -12,10 +12,6 @@
 
 * Check that objdump is installed.
 
-* Add example of output to README.
-
-* Make repo public.
-
 * Don't show backtrace just because provided with bad input.
 
 * Publish gem.
