@@ -6,7 +6,7 @@ An example of the output from this tool:
 
 ![example of output](doc/example.svg)
 
-The same example, but simplified with a [transitive reduction](https://en.wikipedia.org/wiki/Transitive_reduction) from graphviz's [tred](https://manpages.debian.org/jessie/graphviz/tred.1.en.html) tool:
+The same example, but simplified by a [transitive reduction](https://en.wikipedia.org/wiki/Transitive_reduction) from graphviz's [tred](https://manpages.debian.org/jessie/graphviz/tred.1.en.html) tool:
 
 ![example of output piped through tred](doc/example-tred.svg)
 
