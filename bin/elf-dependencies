@@ -60,12 +60,23 @@ class Libs
     libs = paths.map do |path|
       Lib.new(options, path)
     end
-    @libs = {}
+    libsBySoname = {}
     libs.each do |lib|
       soname = lib.soname
-      raise "multiple libs with same soname: #{soname}" if @libs.include?(soname)
-      @libs[soname] = lib
+      libsBySoname[soname] ||= []
+      libsBySoname[soname] << lib
     end
+    duplicates = libsBySoname.select { |_, libs| libs.size != 1 }
+    unless duplicates.empty?
+      STDERR.puts "duplicate sonames:"
+      STDERR.puts ""
+      duplicates.each do |soname, libs|
+        paths = libs.map { |lib| lib.path }
+        STDERR.puts "#{soname}: #{paths.shelljoin()}"
+      end
+      exit 1
+    end
+    @libs = Hash[libsBySoname.map { |soname, libs| [soname, libs.first] }]
   end
 
   def lib(soname)
@@ -113,11 +124,16 @@ class Lib
   end
 
   def initialize(options, path)
+    @path = path.dup.freeze
     @soname, @deps = self.class.parse_dependencies(options, path)
   end
 
+  def path
+    @path
+  end
+
   def soname
-    return @soname
+    @soname
   end
 
   def self.dot_quoted_soname(soname)
