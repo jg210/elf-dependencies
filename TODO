@@ -8,6 +8,8 @@
   - apply to everything under /usr/lib/?
   - quoting of graphviz identifiers.
 
+* rubocop static analysis.
+
 * Add relevant rbenv configuration from aws-experiments repo.
 
 * Check that objdump is installed.
